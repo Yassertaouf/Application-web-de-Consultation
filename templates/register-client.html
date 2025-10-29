@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription Client - Farire Impression</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Georgia, serif; }
+  body { background:#f8f6f0; color:#1e3a8a; line-height:1.6; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+  
+  .register-container {
+    background:white; padding:3rem 2rem; border-radius:0.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.1); width:100%; max-width:450px;
+  }
+
+  h2 { font-weight:300; margin-bottom:1rem; color:#1e3a8a; text-align:center; }
+  p.subtitle { color:#e85a4f; font-size:0.875rem; font-weight:500; text-align:center; margin-bottom:2rem; letter-spacing:1px; }
+
+  label { display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.25rem; }
+  input { width:100%; padding:0.5rem 0.75rem; border:1px solid #d1d5db; border-radius:0.25rem; margin-bottom:1rem; }
+  input:focus { outline:none; border-color:#1e3a8a; box-shadow:0 0 0 2px rgba(30,58,138,0.2); }
+
+  button { width:100%; padding:0.75rem; background:#e85a4f; color:white; border:none; font-size:1.125rem; font-weight:500; cursor:pointer; border-radius:0.25rem; }
+  button:hover { background:#d44a3f; }
+
+  .login-link { text-align:center; margin-top:1rem; font-size:0.875rem; }
+  .login-link a { color:#1e3a8a; font-weight:500; }
+  .login-link a:hover { color:#e85a4f; }
+
+  .flash-message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+  .flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .flash-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+</style>
+</head>
+<body>
+
+<div class="register-container">
+  <p class="subtitle">INSCRIPTION CLIENT</p>
+  <h2>Créez votre compte</h2>
+  
+  <!-- Messages Flash -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  
+  <form action="/register-client" method="post">
+    <label for="name">Nom complet</label>
+    <input type="text" id="name" name="name" placeholder="Votre nom complet" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Votre email" required>
+
+    <label for="password">Mot de passe</label>
+    <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+
+    <label for="confirm-password">Confirmer le mot de passe</label>
+    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmez le mot de passe" required>
+
+    <button type="submit">S'INSCRIRE</button>
+  </form>
+  
+  <div class="login-link">
+    Déjà un compte ? <a href="/login-client">Connectez-vous</a>
+  </div>
+</div>
+
+</body>
+</html>

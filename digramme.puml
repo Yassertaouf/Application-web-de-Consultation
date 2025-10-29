@@ -1,0 +1,122 @@
+@startuml
+title Diagramme de classes UML - Projet Farire 
+
+' =======================
+' Classes principales
+' =======================
+
+class Admin {
+    +id : int
+    +nom : string
+    +email : string
+    +password : string
+    +telephone : string
+    +created_at : datetime
+    --
+    +ajouterProduit(p: Produit)
+    +modifierProduit(p: Produit)
+    +supprimerProduit(id: int)
+    +gererClients()
+    +gererDevis()
+}
+
+class Client {
+    +id : int
+    +nom : string
+    +email : string
+    +password : string
+    +telephone : string
+    +adresse : string
+    +date_creation : datetime
+    --
+    +envoyerDevis(d: Devis)
+    +consulterProduits()
+    +commanderProduit(p: Produit)
+}
+
+class Categorie {
+    +id : int
+    +nom : string
+    +description : string
+    +created_at : datetime
+    --
+    +ajouterProduit(p: Produit)
+}
+
+class Produit {
+    +id : int
+    +nom : string
+    +description : string
+    +prix : float
+    +image : string
+    +stock : int
+    +statut : string
+    +created_at : datetime
+    --
+    +afficherInfo()
+    +modifierStock(qte: int)
+}
+
+class Service {
+    +id : int
+    +nom : string
+    +description : string
+    +prix : float
+    +duree_estimee : string
+    +statut : string
+    +created_at : datetime
+    --
+    +afficherDetail()
+}
+
+class Devis {
+    +id : int
+    +nom : string
+    +email : string
+    +sujet : string
+    +message : string
+    +created_at : datetime
+    +statut : string
+    --
+    +valider()
+    +annuler()
+}
+
+' =======================
+' Relations entre classes
+' =======================
+
+' Une catégorie contient plusieurs produits
+Categorie "1" -- "0..*" Produit : contient >
+
+' Un admin peut gérer plusieurs produits et services
+Admin "1" -- "0..*" Produit : gère >
+Admin "1" -- "0..*" Service : gère >
+
+' Un client peut envoyer plusieurs devis
+Client "1" -- "0..*" Devis : envoie >
+
+' Un client peut commander plusieurs produits
+Client "1" -- "0..*" Produit : Voir >
+
+' Un devis est lié à un ou plusieurs services
+Devis "1" -- "0..*" Service : concerne >
+
+' Un devis peut concerner des produits aussi
+Devis "1" -- "0..*" Produit : inclut >
+
+' =======================
+' Styles visuels
+' =======================
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #F9F9F9
+skinparam classBackgroundColor #FFF
+skinparam classBorderColor #333
+skinparam arrowColor #666
+skinparam classFontColor #111
+skinparam titleFontSize 20
+skinparam classFontSize 14
+skinparam roundcorner 15
+skinparam shadowing true
+
+@enduml

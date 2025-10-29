@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services - Farire Impression</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Georgia, serif; }
+  body { background:#f8f6f0; color:#1e3a8a; line-height:1.6; }
+
+  nav { position:fixed; top:0; left:0; right:0; background:#f1f5f9; z-index:50; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+  nav .logo { font-size:2rem; color:#e85a4f; font-weight:bold; letter-spacing:2px; }
+  nav ul { display:flex; gap:2rem; list-style:none; font-size:0.9rem; font-weight:500; color:#4b5563; }
+  nav ul li a:hover { color:#e85a4f; }
+  nav .circle { width:32px; height:32px; background:#1e3a8a; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.75rem; cursor:pointer; }
+
+  section { padding:6rem 2rem; }
+  .section-title { text-align:center; margin-bottom:4rem; }
+  .section-title p { color:#e85a4f; font-size:0.875rem; font-weight:500; letter-spacing:2px; margin-bottom:0.5rem; }
+  .section-title h2 { font-size:2.5rem; font-weight:300; color:#1e3a8a; }
+
+  .services { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; max-width:1200px; margin:0 auto; }
+  .service-card { background:white; padding:2rem; border-radius:0.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.1); text-align:center; transition:all 0.3s; }
+  .service-card:hover { box-shadow:0 15px 25px rgba(0,0,0,0.15); }
+  .service-card img { width:80px; height:80px; object-fit:cover; margin-bottom:1rem; border-radius:0.25rem; }
+  .service-card h3 { margin-bottom:0.5rem; }
+  .service-card p { font-size:0.875rem; color:#4b5563; margin-bottom:0.5rem; }
+  .service-card .price { font-weight:bold; color:#e85a4f; }
+</style>
+</head>
+<body>
+
+
+<nav>
+  <div class="logo">Farire Impression</div>
+  <ul>
+   
+    <li><a href="/">Accueil</a></li>
+    <li><a href="#services">Services</a></li>
+  
+  </ul>
+  <div class="circle">F</div>
+</nav>
+
+<section id="services">
+  <div class="section-title">
+    <p>NOS SERVICES</p>
+    <h2>Découvrez nos offres d'impression</h2>
+  </div>
+  <div class="services">
+    <!-- Carte de visite -->
+    <div class="service-card">
+      <img src="{{ url_for('static', filename='Carte visite.webp') }}" alt="Carte de Visite">
+      <h3>Carte de Visite</h3>
+      <p>Design professionnel pour vos cartes de visite.</p>
+      <div class="price">50 DH / 100 pcs</div>
+    </div>
+
+    <!-- Plastification -->
+    <div class="service-card">
+      <img src="{{ url_for('static', filename='plastification.jpg') }}" alt="Plastification">
+      <h3>Plastification</h3>
+      <p>Protégez vos documents et supports imprimés.</p>
+      <div class="price">15 DH / feuille</div>
+    </div>
+
+    <!-- Logo Design -->
+    <div class="service-card">
+      <img src="{{ url_for('static', filename='logo-design.png') }}" alt="Design Logo">
+      <h3>Design de Logo</h3>
+      <p>Création de logos uniques pour votre entreprise.</p>
+      <div class="price">500 DH / logo</div>
+    </div>
+
+    <!-- Fiches publicitaires -->
+    <div class="service-card">
+      <img src="{{ url_for('static', filename='fiche publicitaire.jpg') }}" alt="Fiche Publicitaire">
+      <h3>Fiche Publicitaire</h3>
+      <p>Conception de fiches et flyers pour vos promotions.</p>
+      <div class="price">100 DH / 50 pcs</div>
+    </div>
+
+    <!-- Impression générale -->
+    <div class="service-card">
+      <img src="{{ url_for('static', filename='image.jpeg') }}" alt="Impression Générale">
+      <h3>Impression Générale</h3>
+      <p>Documents, brochures, magazines et affiches.</p>
+      <div class="price">À partir de 1 DH / page</div>
+    </div>
+
+    <!-- Reliure -->
+    <div class="service-card">
+      <img src="{{ url_for('static', filename='Reliure.jpg') }}" alt="Reliure">
+      <h3>Reliure</h3>
+      <p>Reliure de rapports, dossiers et thèses.</p>
+      <div class="price">20 DH / pièce</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

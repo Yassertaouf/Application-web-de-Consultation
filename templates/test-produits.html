@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Produits</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f8f6f0; }
+        .product { border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px; background: white; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        nav { background:#f1f5f9; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; }
+        nav .logo { font-size:1.5rem; color:#e85a4f; font-weight:bold; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Farire Impression - TEST</div>
+        <div>
+            <a href="/produit" style="margin-right: 15px;">Page Produits Normale</a>
+            <a href="/logout">Déconnexion</a>
+        </div>
+    </nav>
+
+    <h1>TEST PRODUITS - DEBUG</h1>
+    
+    <div class="debug">
+        <strong>Informations de debug:</strong><br>
+        Nombre de produits trouvés: <strong>{{ produits|length }}</strong><br>
+        Client connecté: {{ client.name }} ({{ client.email }})
+    </div>
+
+    {% if produits %}
+        <div class="success">
+            <h2>✅ SUCCÈS : {{ produits|length }} produit(s) trouvé(s)</h2>
+        </div>
+        
+        <h2>Liste des produits :</h2>
+        {% for produit in produits %}
+        <div class="product">
+            <h3>{{ produit.nom }}</h3>
+            <p><strong>ID:</strong> {{ produit.id }}</p>
+            <p><strong>Catégorie:</strong> {{ produit.categorie_nom }}</p>
+            <p><strong>Prix:</strong> {{ produit.prix }} DH</p>
+            <p><strong>Stock:</strong> {{ produit.stock }}</p>
+            <p><strong>Statut:</strong> {{ produit.statut }}</p>
+            {% if produit.description %}
+                <p><strong>Description:</strong> {{ produit.description }}</p>
+            {% endif %}
+            {% if produit.image_url %}
+                <p><strong>Image:</strong> {{ produit.image_url }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="error">
+            <h2>❌ ERREUR : AUCUN PRODUIT TROUVÉ</h2>
+            <p>Problèmes possibles :</p>
+            <ul>
+                <li>Les produits n'ont pas le statut "actif"</li>
+                <li>Problème de connexion à la base de données</li>
+                <li>Requête SQL incorrecte</li>
+                <li>Aucun produit dans la base</li>
+            </ul>
+        </div>
+        
+        <h3>Solutions :</h3>
+        <ol>
+            <li><a href="/fix-produits-statut" target="_blank">Corriger les statuts des produits</a></li>
+            <li><a href="/debug-produits-complet" target="_blank">Vérifier tous les produits</a></li>
+            <li><a href="/admin/produits" target="_blank">Ajouter des produits (admin)</a></li>
+        </ol>
+    {% endif %}
+
+    <div style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: 5px;">
+        <h3>Liens utiles :</h3>
+        <ul>
+            <li><a href="/produit">Page produits normale</a></li>
+            <li><a href="/debug-produits-complet" target="_blank">Debug complet</a></li>
+            <li><a href="/fix-produits-statut" target="_blank">Corriger les statuts</a></li>
+            <li><a href="/test-db" target="_blank">Tester la base de données</a></li>
+        </ul>
+    </div>
+</body>
+</html>

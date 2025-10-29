@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Services - Farire Impression</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: Georgia, serif; 
+        }
+        
+        body { 
+            background: #f8f6f0; 
+            color: #1e3a8a; 
+            line-height: 1.6; 
+        }
+        
+        a { 
+            text-decoration: none; 
+            color: inherit; 
+        }
+
+        /* Navigation */
+        nav { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            background: #f1f5f9; 
+            z-index: 50; 
+            padding: 1rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav .logo { 
+            font-size: 1.5rem; 
+            color: #e85a4f; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+        }
+        
+        nav ul { 
+            display: flex; 
+            gap: 2rem; 
+            list-style: none; 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            color: #4b5563; 
+        }
+        
+        nav ul li a:hover { 
+            color: #e85a4f; 
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #1e3a8a;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #1e3a8a;
+            color: white;
+            padding: 2rem 1rem;
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            color: #e85a4f;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            border-radius: 0.25rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover {
+            background: #e85a4f;
+            color: white;
+        }
+
+        .sidebar-menu a.active {
+            background: #e85a4f;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #1e3a8a;
+        }
+
+        .btn {
+            background: #e85a4f;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #d44a3f;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab.active {
+            border-bottom-color: #e85a4f;
+            color: #e85a4f;
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            background: #1e3a8a;
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .table-header h2 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            color: #1e3a8a;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-nouvelle {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-en_cours {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-terminee {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-annulee {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left-color: #10b981;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #dc2626;
+            border-left-color: #ef4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Farire Impression</div>
+        <ul>
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}">Déconnexion</a></li>
+        </ul>
+        <div class="user-info">
+            <span>Bienvenue, <strong>{{ admin_name }}</strong></span>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">Dashboard Admin</div>
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt"></i> Tableau de Bord</a></li>
+                <li><a href="{{ url_for('admin_produits') }}"><i class="fas fa-box"></i> Produits</a></li>
+                <li><a href="{{ url_for('admin_services') }}" class="active"><i class="fas fa-cogs"></i> Services</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Flash Messages -->
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }} me-2"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Header -->
+            <div class="page-header">
+                <h1>Gestion des Services</h1>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('services')">Services</div>
+                <div class="tab" onclick="switchTab('demandes')">Demandes de Service</div>
+            </div>
+
+            <!-- Services Tab -->
+            <div id="services" class="tab-content active">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Liste des Services ({{ services|length }})</h2>
+                    </div>
+                    <div class="table-content">
+                        {% if services %}
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Description</th>
+                                        <th>Prix</th>
+                                        <th>Durée</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for service in services %}
+                                    <tr>
+                                        <td><strong>{{ service.nom }}</strong></td>
+                                        <td>
+                                            {% if service.description %}
+                                                {{ service.description[:80] }}{% if service.description|length > 80 %}...{% endif %}
+                                            {% else %}
+                                                <span style="color: #9ca3af; font-style: italic;">Aucune description</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if service.prix %}
+                                                <strong>{{ "%.2f"|format(service.prix) }} DH</strong>
+                                            {% else %}
+                                                <span style="color: #9ca3af;">Sur devis</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ service.duree_estimee or 'Non spécifiée' }}</td>
+                                        <td>
+                                            <span class="status-badge {% if service.statut == 'actif' %}status-active{% else %}status-inactive{% endif %}">
+                                                {{ service.statut }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="#" class="btn btn-small btn-secondary">
+                                                    <i class="fas fa-edit"></i> Modifier
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                                <i class="fas fa-cogs fa-3x mb-3"></i>
+                                <h3>Aucun service trouvé</h3>
+                                <p>Les services configurés apparaîtront ici.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demandes Tab -->
+            <div id="demandes" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Demandes de Service ({{ demandes|length }})</h2>
+                    </div>
+                    <div class="table-content">
+                        {% if demandes %}
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Client</th>
+                                        <th>Service</th>
+                                        <th>Description</th>
+                                        <th>Statut</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for demande in demandes %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ demande.client_nom }}</strong>
+                                            <br><small>{{ demande.service_nom }}</small>
+                                        </td>
+                                        <td>{{ demande.service_nom }}</td>
+                                        <td>
+                                            {% if demande.description_demande %}
+                                                {{ demande.description_demande[:60] }}{% if demande.description_demande|length > 60 %}...{% endif %}
+                                            {% else %}
+                                                <span style="color: #9ca3af; font-style: italic;">Aucune description</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-{{ demande.statut }}">
+                                                {{ demande.statut|replace('_', ' ')|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                {{ demande.created_at.strftime('%d/%m/%Y') if demande.created_at else 'N/A' }}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="#" class="btn btn-small">
+                                                    <i class="fas fa-eye"></i> Voir
+                                                </a>
+                                                <a href="#" class="btn btn-small btn-secondary">
+                                                    <i class="fas fa-edit"></i> Modifier
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                                <i class="fas fa-list fa-3x mb-3"></i>
+                                <h3>Aucune demande de service</h3>
+                                <p>Les demandes de service des clients apparaîtront ici.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

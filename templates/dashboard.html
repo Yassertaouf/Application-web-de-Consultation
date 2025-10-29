@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Farire Impression</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: Georgia, serif; 
+        }
+        
+        body { 
+            background: #f8f6f0; 
+            color: #1e3a8a; 
+            line-height: 1.6; 
+        }
+        
+        a { 
+            text-decoration: none; 
+            color: inherit; 
+        }
+
+        /* Navigation */
+        nav { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            background: #f1f5f9; 
+            z-index: 50; 
+            transition: all 0.3s; 
+            padding: 1rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav .logo { 
+            font-size: 1.5rem; 
+            color: #e85a4f; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+        }
+        
+        nav ul { 
+            display: flex; 
+            gap: 2rem; 
+            list-style: none; 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            color: #4b5563; 
+        }
+        
+        nav ul li a:hover { 
+            color: #e85a4f; 
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #1e3a8a;
+        }
+
+        .theme-toggle {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .theme-toggle:hover {
+            background: #e85a4f;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #1e3a8a;
+            color: white;
+            padding: 2rem 1rem;
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            color: #e85a4f;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: white;
+            border-radius: 0.25rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #e85a4f;
+            color: white;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+            border-top: 4px solid #e85a4f;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Tables */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #1e3a8a;
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .badge {
+            background: #e85a4f;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .table-content {
+            padding: 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            color: #1e3a8a;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-new {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-treated {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left-color: #10b981;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #dc2626;
+            border-left-color: #ef4444;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: #1f2937;
+            color: #f9fafb;
+        }
+
+        body.dark-mode .main-content {
+            background: #1f2937;
+        }
+
+        body.dark-mode .stat-card,
+        body.dark-mode .table-card {
+            background: #374151;
+            color: #f9fafb;
+        }
+
+        body.dark-mode .stat-number,
+        body.dark-mode .stat-icon {
+            color: #e85a4f;
+        }
+
+        body.dark-mode .data-table th {
+            background: #4b5563;
+            color: #f9fafb;
+        }
+
+        body.dark-mode .data-table td {
+            color: #d1d5db;
+            border-bottom-color: #4b5563;
+        }
+
+        body.dark-mode .data-table tr:hover {
+            background: #4b5563;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Farire Impression</div>
+        <ul>
+            <li><a href="{{ url_for('home') }}" target="_blank">Voir le Site</a></li>
+            <li><a href="{{ url_for('logout') }}">Déconnexion</a></li>
+        </ul>
+        <div class="user-info">
+            <span>Bienvenue, <strong>{{ admin_name }}</strong></span>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i> Mode
+            </button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">Dashboard Admin</div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Tableau de Bord</a></li>
+                <li><a href="{{ url_for('admin_produits') }}"><i class="fas fa-box"></i> Produits</a></li>
+                <li><a href="{{ url_for('admin_services') }}"><i class="fas fa-cogs"></i> Services</a></li>
+                <li><a href="{{ url_for('home') }}" target="_blank"><i class="fas fa-external-link-alt"></i> Voir le Site</a></li>
+                <li><a href="{{ url_for('debug_devis') }}" target="_blank"><i class="fas fa-bug"></i> Debug Devis</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Flash Messages -->
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }} me-2"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Header -->
+            <div class="dashboard-header">
+                <h1>Tableau de Bord Admin</h1>
+                <p>{{ now.strftime('%d/%m/%Y %H:%M') }} • Gestion de votre site vitrine</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number">{{ total_clients }}</div>
+                    <div class="stat-label">Clients Inscrits</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-number">{{ total_produits }}</div>
+                    <div class="stat-label">Produits</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="stat-number">{{ total_devis }}</div>
+                    <div class="stat-label">Total Devis</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="stat-number">{{ nouveaux_devis }}</div>
+                    <div class="stat-label">Nouveaux Devis</div>
+                </div>
+            </div>
+
+            <!-- Tables -->
+            <div class="tables-grid">
+                <!-- Recent Clients -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Derniers Clients Inscrits</h3>
+                        <span class="badge">{{ total_clients }}</span>
+                    </div>
+                    <div class="table-content">
+                        {% if recent_clients %}
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for client in recent_clients %}
+                                    <tr>
+                                        <td>
+                                            <i class="fas fa-user-circle me-2" style="color: #e85a4f;"></i>
+                                            {{ client.name }}
+                                        </td>
+                                        <td>{{ client.email }}</td>
+                                        <td>
+                                            <small>
+                                                {{ client.created_at.strftime('%d/%m/%Y') if client.created_at else 'N/A' }}
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                                <i class="fas fa-users fa-2x mb-2"></i>
+                                <p>Aucun client inscrit</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Recent Devis -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Dernières Demandes de Devis</h3>
+                        <div>
+                            <span class="badge" style="margin-right: 0.5rem;">{{ total_devis }}</span>
+                            <span class="badge" style="background: #f59e0b;">{{ nouveaux_devis }}</span>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        {% if recent_devis %}
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Sujet</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for devis in recent_devis %}
+                                    <tr>
+                                        <td>
+                                            <i class="fas fa-user me-2" style="color: #e85a4f;"></i>
+                                            {{ devis.nom }}
+                                        </td>
+                                        <td>{{ devis.email }}</td>
+                                        <td>
+                                            <small title="{{ devis.sujet }}">
+                                                {{ devis.sujet[:25] }}{% if devis.sujet|length > 25 %}...{% endif %}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge {% if devis.statut == 'nouveau' %}status-new{% else %}status-treated{% endif %}">
+                                                {{ devis.statut }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                                <i class="fas fa-envelope fa-2x mb-2"></i>
+                                <p>Aucune demande de devis</p>
+                                <a href="{{ url_for('home') }}" target="_blank" style="color: #e85a4f; text-decoration: underline;">
+                                    Voir le site
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark/Light Mode Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            const icon = themeToggle.querySelector('i');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                icon.className = 'fas fa-moon';
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Mode Sombre';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-mode');
+                icon.className = 'fas fa-sun';
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Mode Clair';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Mode Clair';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Mode Sombre';
+            }
+
+            // Auto refresh every 30 seconds
+            setInterval(() => {
+                window.location.reload();
+            }, 30000);
+        });
+    </script>
+</body>
+</html>

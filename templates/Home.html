@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farire Impression</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Georgia, serif; }
+  body { background: #f8f6f0; color: #1e3a8a; line-height:1.6; }
+  a { text-decoration:none; color:inherit; }
+
+  /* Navigation */
+  nav { position:fixed; top:0; left:0; right:0; background:#f1f5f9; z-index:50; transition:all 0.3s; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+  nav .logo { font-size:2rem; color:#e85a4f; font-weight:bold; letter-spacing:2px; }
+  nav ul { display:flex; gap:2rem; list-style:none; font-size:0.9rem; font-weight:500; color:#4b5563; }
+  nav ul li a:hover { color:#e85a4f; }
+  nav .circle { width:50px; height:50px; background:#ffffff; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.75rem; cursor:pointer; }
+
+  /* Hero Section */
+  .hero { position:relative; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; color:white; }
+  .hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hero::before { content:""; position:absolute; inset:0; background: rgba(0,0,0,0.4); }
+  .hero .content { position:relative; z-index:10; max-width:800px; padding:0 1rem; }
+  .hero h1 { font-size:4rem; font-weight:300; margin-bottom:1rem; letter-spacing:3px; }
+  .hero p { font-size:1.25rem; margin-bottom:2rem; }
+  .hero button { background:#e85a4f; color:white; padding:0.75rem 2.5rem; font-size:1.125rem; font-weight:500; border:none; cursor:pointer; }
+  .hero button:hover { background:#d44a3f; }
+  .hero .chevron { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%) rotate(45deg); width:2rem; height:2rem; border-bottom:2px solid white; border-right:2px solid white; animation:bounce 2s infinite; opacity:0.7; }
+  @keyframes bounce { 0%,100% { transform:translateX(-50%) translateY(0) rotate(45deg); } 50% { transform:translateX(-50%) translateY(10px) rotate(45deg); } }
+
+  /* Sections */
+  section { padding:6rem 2rem; }
+  .section-title { text-align:center; margin-bottom:4rem; }
+  .section-title p { color:#e85a4f; font-size:0.875rem; font-weight:500; letter-spacing:2px; margin-bottom:0.5rem; }
+  .section-title h2 { font-size:2.5rem; font-weight:300; color:#1e3a8a; }
+
+  /* Products / Experience */
+  .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; max-width:1200px; margin:0 auto; }
+  .product-card { background:white; padding:2rem; border-radius:0.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.1); text-align:center; transition:all 0.3s; }
+  .product-card:hover { box-shadow:0 15px 25px rgba(0,0,0,0.15); }
+  .product-card .icon { font-size:2.5rem; margin-bottom:1rem; }
+
+  /* Chef Section */
+  .chef-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:4rem; align-items:center; max-width:1200px; margin:0 auto; }
+  .chef-image { position:relative; aspect-ratio:3/4; box-shadow:0 10px 20px rgba(0,0,0,0.1); }
+  .chef-image img { width:100%; height:100%; object-fit:cover; border-radius:0.25rem; }
+  .chef-badge { position:absolute; bottom:-1.5rem; right:-1.5rem; width:8rem; height:8rem; background:#1e3a8a; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; text-align:center; font-size:0.75rem; font-weight:500; }
+  .chef-accent { position:absolute; top:-1rem; left:-1rem; width:6rem; height:6rem; background:#e85a4f; opacity:0.2; border-radius:50%; }
+  .chef-desc { display:flex; flex-direction:column; gap:1rem; }
+
+  /* Contact / Form */
+  .contact { background:white; max-width:700px; margin:0 auto; padding:3rem 2rem; border-radius:0.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.1); }
+  .contact label { display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.25rem; }
+  .contact input, .contact select { width:100%; padding:0.5rem 0.75rem; border:1px solid #d1d5db; border-radius:0.25rem; margin-bottom:1rem; }
+  .contact input:focus, .contact select:focus { outline:none; border-color:#1e3a8a; box-shadow:0 0 0 2px rgba(30,58,138,0.2); }
+  .contact button { width:100%; padding:0.75rem; background:#e85a4f; color:white; border:none; font-size:1.125rem; font-weight:500; cursor:pointer; }
+  .contact button:hover { background:#d44a3f; }
+
+  /* Footer */
+  footer { background:#1e3a8a; color:white; padding:6rem 2rem; }
+  footer h3 { font-size:1.5rem; margin-bottom:1rem; color:#e85a4f; }
+  footer p, footer a { font-size:0.875rem; color:#d1d5db; }
+  footer a:hover { color:white; }
+  footer form { display:flex; gap:0; }
+  footer input { flex:1; border-radius:0.25rem 0 0 0.25rem; border:1px solid rgba(255,255,255,0.2); padding:0.5rem; background:rgba(255,255,255,0.1); color:white; }
+  footer button { border-radius:0 0.25rem 0.25rem 0; background:#e85a4f; padding:0.5rem 1rem; border:none; cursor:pointer; }
+  footer button:hover { background:#d44a3f; }
+
+  /* WhatsApp flottant */
+  .floating-whatsapp {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+  }
+  .floating-whatsapp a {
+    display: block;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+  }
+  .floating-whatsapp a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo">Farire Impression</div>
+  <ul>
+    <li><a href="#products">Produits</a></li>
+    <li><a href="#chef">Responsable</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="/service">Services</a></li>
+    <li><a href="/login-client">Connexion Client</a></li>
+    <li><a href="/login-admin">Connexion Admin</a></li>
+  </ul>
+  <div class="circle">
+    <img src="{{ url_for('static', filename='image.png') }}" alt="Farire Impression" style="width: 60px; height: 60px; object-fit: contain;">
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <img src="{{ url_for('static', filename='Farire.jpg') }}" alt="Impression et fournitures de bureau" style="filter: brightness(40%);">
+  <div class="content">
+    <h1>Farire Impression</h1>
+    <p>Votre partenaire pour les fournitures de bureau et équipements informatiques.<br>Découvrez nos produits de qualité professionnelle.</p>
+    <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">VOIR LES PRODUITS</button>
+  </div>
+  <div class="chevron"></div>
+</section>
+
+<!-- Products / Experience Section -->
+<section id="products">
+  <div class="section-title">
+    <p>NOS PRODUITS</p>
+    <h2>Équipements et Fournitures</h2>
+  </div>
+  <div class="products">
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='10784129.webp') }}" alt="PC de Bureau" style="width:80px; height:80px; object-fit:cover; margin-bottom:1rem; border-radius:0.25rem;">
+      <h3>PC de Bureau</h3>
+      <p>Performances fiables pour le travail quotidien et le gaming.</p>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='images.jpeg') }}" alt="Chaises de Bureau" style="width:80px; height:80px; object-fit:cover; margin-bottom:1rem; border-radius:0.25rem;">
+      <h3>Chaises de Bureau</h3>
+      <p>Ergonomiques et confortables pour vos longues journées de travail.</p>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='images (1).jpeg') }}" alt="Imprimantes" style="width:80px; height:80px; object-fit:cover; margin-bottom:1rem; border-radius:0.25rem;">
+      <h3>Imprimantes</h3>
+      <p>Impression rapide et de haute qualité pour tous vos besoins.</p>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='accessoires.webp') }}" alt="Accessoires" style="width:80px; height:80px; object-fit:cover; margin-bottom:1rem; border-radius:0.25rem;">
+      <h3>Accessoires</h3>
+      <p>Claviers, souris, casques et tous les essentiels pour votre bureau.</p>
+    </div>
+    <a href="{{ url_for('login_client') }}">Connectez-vous pour voir plus de produits..</a>
+  </div>
+</section>
+
+<!-- Chef Section -->
+<section id="chef">
+  <div class="section-title">
+    <p>NOTRE RESPONSABLE</p>
+    <h2>Le Dr Moustapha LHAMDANI</h2>
+  </div>
+  <div class="chef-grid">
+    <div class="chef-image">
+      <img src="{{ url_for('static', filename='unnamed.webp') }}" alt="Portrait Dr Moustapha LHAMDANI" style="filter: brightness(40%);">
+      <div class="chef-badge">MICHELIN</div>
+      <div class="chef-accent"></div>
+    </div>
+    <div class="chef-desc">
+      <p>Chez Farire Impression, nous combinons expertise et innovation pour offrir les meilleurs équipements et services professionnels.</p>
+      <p>"Chaque produit et service est choisi avec soin, conçu pour répondre aux besoins des professionnels."</p>
+      <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem;">
+        <div style="width:48px;height:48px;background:#1e3a8a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;">ML</div>
+        <div>
+          <div style="font-weight:500;">Dr Moustapha LHAMDANI</div>
+          <div style="font-size:0.875rem;color:#6b7280;">Fondateur & Responsable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+  <div class="contact">
+    <p style="color:#e85a4f; font-size:0.875rem;">CONTACTEZ-NOUS</p>
+    <h2>Demandez un devis ou des informations</h2>
+    <form action="{{ url_for('contact') }}" method="POST">
+        <div style="margin-bottom:1rem;">
+            <label for="nom" style="display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.25rem;">Nom Complet</label>
+            <input type="text" id="nom" name="nom" required style="width:100%; padding:0.5rem 0.75rem; border:1px solid #d1d5db; border-radius:0.25rem;">
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label for="email" style="display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.25rem;">Email</label>
+            <input type="email" id="email" name="email" required style="width:100%; padding:0.5rem 0.75rem; border:1px solid #d1d5db; border-radius:0.25rem;">
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label for="sujet" style="display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.25rem;">Sujet</label>
+            <input type="text" id="sujet" name="sujet" required style="width:100%; padding:0.5rem 0.75rem; border:1px solid #d1d5db; border-radius:0.25rem;">
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label for="message" style="display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.25rem;">Message</label>
+            <textarea id="message" name="message" rows="5" required style="width:100%; padding:0.5rem 0.75rem; border:1px solid #d1d5db; border-radius:0.25rem;"></textarea>
+        </div>
+        <button type="submit" style="width:100%; padding:0.75rem; background:#e85a4f; color:white; border:none; font-size:1.125rem; font-weight:500; cursor:pointer;">Envoyer le Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:3rem;">
+    <div>
+      <h3>Farire Impression</h3>
+      <p>Votre partenaire pour l'équipement de bureau, l'informatique et l'impression professionnelle.</p>
+    </div>
+    <div>
+      <h3>Contact</h3>
+      <p>Tél: 05 23 40 53 63</p>
+      <p>Email: farirefarire@gmail.com</p>
+      <p>7 bd. Zerktouni , Smaâla Settat - Maroc</p>
+    </div>
+    <div>
+      <h3>Newsletter</h3>
+      <p>Recevez nos nouveautés et promotions.</p>
+      <form style="display:flex;gap:0;">
+        <input type="email" placeholder="Votre email">
+        <button type="submit">S'inscrire</button>
+      </form>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.2); padding-top:2rem; text-align:center; font-size:0.875rem; color:#9ca3af;">
+    &copy; 2024 Farire Impression. Tous droits réservés.
+  </div>
+</footer>
+
+<!-- WhatsApp flottant -->
+<div class="floating-whatsapp">
+  <a href="https://wa.me/212523405363" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
+
+</body>
+</html>

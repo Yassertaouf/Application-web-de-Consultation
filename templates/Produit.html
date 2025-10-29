@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farire Impression - Produits</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Georgia, serif; }
+  body { background: #f8f6f0; color: #1e3a8a; line-height:1.6; }
+  a { text-decoration:none; color:inherit; }
+
+  nav { position:fixed; top:0; left:0; right:0; background:#f1f5f9; z-index:50; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+  nav .logo { font-size:2rem; color:#e85a4f; font-weight:bold; letter-spacing:2px; }
+  nav ul { display:flex; gap:2rem; list-style:none; font-size:0.9rem; font-weight:500; color:#4b5563; }
+  nav ul li a:hover { color:#e85a4f; }
+  nav .circle { width:32px; height:32px; background:#1e3a8a; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.75rem; cursor:pointer; }
+
+  section { padding:6rem 2rem; }
+  .section-title { text-align:center; margin-bottom:4rem; }
+  .section-title p { color:#e85a4f; font-size:0.875rem; font-weight:500; letter-spacing:2px; margin-bottom:0.5rem; }
+  .section-title h2 { font-size:2.5rem; font-weight:300; color:#1e3a8a; }
+
+  .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; max-width:1200px; margin:0 auto; }
+  .product-card { background:white; padding:2rem; border-radius:0.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.1); text-align:center; transition:all 0.3s; }
+  .product-card:hover { box-shadow:0 15px 25px rgba(0,0,0,0.15); transform:translateY(-5px); }
+  .product-card img { width:120px; height:120px; object-fit:cover; margin-bottom:1rem; border-radius:0.25rem; }
+  .product-card h3 { margin-bottom:0.5rem; }
+  .product-card p { font-size:0.875rem; margin-bottom:0.5rem; color:#4b5563; }
+  .product-card .price { font-weight:500; color:#e85a4f; }
+
+  footer { background:#1e3a8a; color:white; padding:6rem 2rem; text-align:center; }
+  footer p { font-size:0.875rem; color:#d1d5db; }
+
+  .flash-message {
+    padding: 10px;
+    margin: 80px 15px 15px 15px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+  .flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+  .dynamic-badge {
+    background: #e85a4f;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    margin-left: 5px;
+  }
+
+  .category-badge {
+    background: #1e3a8a;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: inline-block;
+  }
+
+  .no-image {
+    width: 120px;
+    height: 120px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    border-radius: 0.25rem;
+    color: #9ca3af;
+  }
+  
+  /* Nouveau style pour les produits personnalisés */
+  .product-card.personalized {
+    border: 2px solid #e85a4f;
+    position: relative;
+  }
+  
+  .personalized-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e85a4f;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<nav>
+  <div class="logo">Farire Impression</div>
+  <ul>
+    <li><a href="#pcs">PC Bureautique</a></li>
+    <li><a href="#imprimantes">Imprimantes</a></li>
+    <li><a href="#papier">Papier</a></li>
+    <li><a href="#chaises">Chaises Gamer</a></li>
+    <li><a href="#accessoires">Accessoires</a></li>
+    <li><a href="/">Accueil</a></li>
+  </ul>
+  <div class="circle">
+     <img src="{{ url_for('static', filename='image.png') }}" alt="Farire Impression" style="width: 60px; height: 60px; object-fit: contain;">
+  </div>
+</nav>
+
+<!-- Messages Flash -->
+{% if client.name %}
+<div class="flash-message flash-success">
+  Bonjour {{ client.name }} ! Découvrez tous nos produits.
+</div>
+{% endif %}
+
+<!-- PRODUITS STATIQUES ET PERSONNALISÉS MÉLANGÉS -->
+
+<!-- PC Bureautique -->
+<section id="pcs">
+  <div class="section-title">
+    <p>PC BUREAUTIQUE</p>
+    <h2>Ordinateurs pour le bureau et le gaming</h2>
+  </div>
+  <div class="products">
+    <!-- Produits statiques -->
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC.webp') }}" alt="PC Standard">
+      <h3>Fujitsu Desktop</h3>
+      <p>PC Esprimo D738, processor Core i5-8400, memory 8 GB SSD, hard drive 250 GB M.2 SATA, Win 11 Pro.</p>
+      <div class="price">3000 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(1).webp') }}" alt="PC Gamer">
+      <h3>MSI MAG  </h3>
+      <p>Gaming PC - Intel Core i5-13400F CPU, GeForce RTX 4060 Ti GPU, 16GB DDR5 RAM, 1TB SSD, Wi-Fi 6E, Windows 11 Home - 500W.</p>
+      <div class="price">7000 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(2).webp') }}" alt="PC Mini">
+      <h3>HP Pro</h3>
+      <p>PC bureau HP 400 G9 i5-12500 22.</p>
+      <div class="price">2500 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(3).webp') }}" alt="PC Standard">
+      <h3>Lenovo ThinkCentre</h3>
+      <p>M90t Tower - Core i7 [Win 10 Pro][11D4000EAX].</p>
+      <div class="price">3499 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(4).webp') }}" alt="PC Gamer">
+      <h3>A 27</h3>
+      <p>inch IPS panel with 4K UHD resolution (3840 x 2160)..</p>
+      <div class="price">7200 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(5).webp') }}" alt="PC Mini">
+      <h3>Japannext JN</h3>
+      <p>34-inch IPS UWQHD curved display.</p>
+      <div class="price">2600 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(6).webp') }}" alt="PC Standard">
+      <h3>Lenovo ThinkVision</h3>
+      <p> écran LED - Full HD (1080p) - 24".</p>
+      <div class="price">3400 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(7).webp') }}" alt="PC Gamer">
+      <h3>MSI Modern</h3>
+      <p>F13MG 017 Business and Productivity Laptop.</p>
+      <div class="price">8000 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(8).webp') }}" alt="PC Mini">
+      <h3> Lenovo V15 </h3>
+      <p>Intel core i5 1235U 8GB Memory 512GB Nvme Intel Uhd Graphics 15.6".</p>
+      <div class="price">2700 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='PC(9).webp') }}" alt="PC Standard">
+      <h3>Fujitsu ESPRIMO</h3>
+      <p>SDRAM i7-9700 Bureau Intel® Core™ i7 de 9e génération 8 Go 512 Go SSD Windows 10 Pro PC.</p>
+      <div class="price">3500 DH</div>
+    </div>
+    
+    <!-- Produits personnalisés pour PC Bureautique -->
+    {% if produits_par_categorie %}
+      {% for categorie, produits in produits_par_categorie.items() %}
+        {% if categorie.lower() in ['pc', 'ordinateur', 'pc bureautique', 'ordinateurs'] %}
+          {% for produit in produits %}
+            <div class="product-card personalized">
+              <span class="personalized-badge">Personnalisé</span>
+              {% if produit.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + produit.image_url) }}" 
+                     alt="{{ produit.nom }}"
+                     style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; border-radius: 0.25rem;">
+              {% else %}
+                <div class="no-image">
+                  <i class="fas fa-image fa-2x"></i>
+                </div>
+              {% endif %}
+              
+              <h3>{{ produit.nom }}</h3>
+              
+              {% if produit.description and produit.description.strip() %}
+                <p>{{ produit.description[:80] }}{% if produit.description|length > 80 %}...{% endif %}</p>
+              {% else %}
+                <p style="color:#9ca3af; font-style: italic;">Aucune description disponible</p>
+              {% endif %}
+              
+              <div class="price">{{ "%.2f"|format(produit.prix) }} DH</div>
+              
+              <div style="margin: 10px 0;">
+                <small style="color:#6b7280; display: block;">
+                  <strong>Stock:</strong> {{ produit.stock }} unités
+                </small>
+                {% if produit.created_at %}
+                <small style="color:#6b7280; display: block;">
+                  <strong>Ajouté le:</strong> {{ produit.created_at.strftime('%d/%m/%Y') }}
+                </small>
+                {% endif %}
+              </div>
+              
+              <div class="category-badge">
+                {{ produit.categorie_nom or 'Non catégorisé' }}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+<!-- Imprimantes -->
+<section id="imprimantes">
+  <div class="section-title">
+    <p>IMPRIMANTES</p>
+    <h2>Différents modèles et types</h2>
+  </div>
+  <div class="products">
+    <!-- Produits statiques -->
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire.png') }}" alt="Jet d'encre">
+      <h3>Canon PIXMA MG7520</h3>
+      <p>All-in-One Printer with Wireless LAN and NFC.</p>
+      <div class="price">800 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(1).png') }}" alt="Laser">
+      <h3>HP LaserJet</h3>
+      <p>Rapide pour gros volumes.</p>
+      <div class="price">1500 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(2).webp') }}" alt="Multifonction">
+      <h3>Hp</h3>
+      <p>Impression, scan et copie.</p>
+      <div class="price">2000 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(3).jpg') }}" alt="Jet d'encre">
+      <h3>Jet d'encre 2</h3>
+      <p>Idéal pour bureau.</p>
+      <div class="price">850 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(4).jpg') }}" alt="Laser">
+      <h3>canon</h3>
+      <p>Volume important.</p>
+      <div class="price">1600 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(5).jpg') }}" alt="Multifonction">
+      <h3>Multifonction 2</h3>
+      <p>Tout en un.</p>
+      <div class="price">2100 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(6).jpg') }}" alt="Jet d'encre">
+      <h3>Jet d'encre 3</h3>
+      <p>Économique.</p>
+      <div class="price">900 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(7).jpg') }}" alt="Laser">
+      <h3>Laser 3</h3>
+      <p>Professionnelle.</p>
+      <div class="price">1800 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(8).jpg') }}" alt="Multifonction">
+      <h3>Multifonction 3</h3>
+      <p>Haute performance.</p>
+      <div class="price">2300 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Imprimaire(10).jpg') }}" alt="Jet d'encre">
+      <h3>Jet d'encre 4</h3>
+      <p>Compacte et efficace.</p>
+      <div class="price">950 DH</div>
+    </div>
+    
+    <!-- Produits personnalisés pour Imprimantes -->
+    {% if produits_par_categorie %}
+      {% for categorie, produits in produits_par_categorie.items() %}
+        {% if categorie.lower() in ['imprimante', 'imprimantes', 'impression'] %}
+          {% for produit in produits %}
+            <div class="product-card personalized">
+              <span class="personalized-badge">Personnalisé</span>
+              {% if produit.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + produit.image_url) }}" 
+                     alt="{{ produit.nom }}"
+                     style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; border-radius: 0.25rem;">
+              {% else %}
+                <div class="no-image">
+                  <i class="fas fa-image fa-2x"></i>
+                </div>
+              {% endif %}
+              
+              <h3>{{ produit.nom }}</h3>
+              
+              {% if produit.description and produit.description.strip() %}
+                <p>{{ produit.description[:80] }}{% if produit.description|length > 80 %}...{% endif %}</p>
+              {% else %}
+                <p style="color:#9ca3af; font-style: italic;">Aucune description disponible</p>
+              {% endif %}
+              
+              <div class="price">{{ "%.2f"|format(produit.prix) }} DH</div>
+              
+              <div style="margin: 10px 0;">
+                <small style="color:#6b7280; display: block;">
+                  <strong>Stock:</strong> {{ produit.stock }} unités
+                </small>
+                {% if produit.created_at %}
+                <small style="color:#6b7280; display: block;">
+                  <strong>Ajouté le:</strong> {{ produit.created_at.strftime('%d/%m/%Y') }}
+                </small>
+                {% endif %}
+              </div>
+              
+              <div class="category-badge">
+                {{ produit.categorie_nom or 'Non catégorisé' }}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+<!-- Papier -->
+<section id="papier">
+  <div class="section-title">
+    <p>PAPIER D'IMPRESSION</p>
+    <h2>Variété et qualité</h2>
+  </div>
+  <div class="products">
+    <!-- Produits statiques -->
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P.webp') }}" alt="Standard">
+      <h3>Hp papier</h3>
+      <p>Pour toutes impressions.</p>
+      <div class="price">50 DH / 500 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(1).webp') }}" alt="Photo">
+      <h3>Cartonné</h3>
+      <p>Pour cartes de visite et flyers.</p>
+      <div class="price">150 DH / 100 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(2).webp') }}" alt="Cartonné">
+      <h3>Xerox</h3>
+      <p>Pour cartes de visite et flyers.</p>
+      <div class="price">120 DH / 250 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(3).webp') }}" alt="Standard">
+      <h3>Standard 2</h3>
+      <p>Impression quotidienne.</p>
+      <div class="price">55 DH / 500 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(4).webp') }}" alt="Photo">
+      <h3>Photo 2</h3>
+      <p>Qualité professionnelle.</p>
+      <div class="price">160 DH / 100 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(5).webp') }}" alt="Cartonné">
+      <h3>Cartonné 2</h3>
+      <p>Flyers et brochures.</p>
+      <div class="price">130 DH / 250 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(6).webp') }}" alt="Standard">
+      <h3>Standard 3</h3>
+      <p>Recyclé écologique.</p>
+      <div class="price">60 DH / 500 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(7).webp') }}" alt="Photo">
+      <h3>Photo 3</h3>
+      <p>Brillant haute qualité.</p>
+      <div class="price">170 DH / 100 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(8).webp') }}" alt="Cartonné">
+      <h3>Cartonné 3</h3>
+      <p>Épais et résistant.</p>
+      <div class="price">140 DH / 250 feuilles</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='P(9).webp') }}" alt="Standard">
+      <h3>Standard 4</h3>
+      <p>Multiusage économique.</p>
+      <div class="price">65 DH / 500 feuilles</div>
+    </div>
+    
+    <!-- Produits personnalisés pour Papier -->
+    {% if produits_par_categorie %}
+      {% for categorie, produits in produits_par_categorie.items() %}
+        {% if categorie.lower() in ['papier', 'papiers', 'papier impression'] %}
+          {% for produit in produits %}
+            <div class="product-card personalized">
+              <span class="personalized-badge">Personnalisé</span>
+              {% if produit.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + produit.image_url) }}" 
+                     alt="{{ produit.nom }}"
+                     style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; border-radius: 0.25rem;">
+              {% else %}
+                <div class="no-image">
+                  <i class="fas fa-image fa-2x"></i>
+                </div>
+              {% endif %}
+              
+              <h3>{{ produit.nom }}</h3>
+              
+              {% if produit.description and produit.description.strip() %}
+                <p>{{ produit.description[:80] }}{% if produit.description|length > 80 %}...{% endif %}</p>
+              {% else %}
+                <p style="color:#9ca3af; font-style: italic;">Aucune description disponible</p>
+              {% endif %}
+              
+              <div class="price">{{ "%.2f"|format(produit.prix) }} DH</div>
+              
+              <div style="margin: 10px 0;">
+                <small style="color:#6b7280; display: block;">
+                  <strong>Stock:</strong> {{ produit.stock }} unités
+                </small>
+                {% if produit.created_at %}
+                <small style="color:#6b7280; display: block;">
+                  <strong>Ajouté le:</strong> {{ produit.created_at.strftime('%d/%m/%Y') }}
+                </small>
+                {% endif %}
+              </div>
+              
+              <div class="category-badge">
+                {{ produit.categorie_nom or 'Non catégorisé' }}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+<!-- Chaises Gamer -->
+<section id="chaises">
+  <div class="section-title">
+    <p>CHAISES GAMER</p>
+    <h2>Confort et design pour le gaming</h2>
+  </div>
+  <div class="products">
+    <!-- Produits statiques -->
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S.webp') }}" alt="Chaise Gamer 1">
+      <h3>Gamer 1</h3>
+      <p>Confort optimal pour longues sessions.</p>
+      <div class="price">1200 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(1).webp') }}" alt="Chaise Gamer 2">
+      <h3>Gamer 2</h3>
+      <p>Design ergonomique.</p>
+      <div class="price">1300 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(2).webp') }}" alt="Chaise Gamer 3">
+      <h3>Gamer 3</h3>
+      <p>Support lombaire intégré.</p>
+      <div class="price">1250 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(3).webp') }}" alt="Chaise Gamer 4">
+      <h3>Gamer 4</h3>
+      <p>Hauteur ajustable.</p>
+      <div class="price">1350 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(4).webp') }}" alt="Chaise Gamer 5">
+      <h3>Gamer 5</h3>
+      <p>Roues silencieuses.</p>
+      <div class="price">1400 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(5).webp') }}" alt="Chaise Gamer 6">
+      <h3>Gamer 6</h3>
+      <p>Dossier inclinable.</p>
+      <div class="price">1500 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(6).webp') }}" alt="Chaise Gamer 7">
+      <h3>Gamer 7</h3>
+      <p>Accoudoirs réglables.</p>
+      <div class="price">1600 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(7).webp') }}" alt="Chaise Gamer 8">
+      <h3>Gamer 8</h3>
+      <p>Tissu respirant.</p>
+      <div class="price">1550 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(8).webp') }}" alt="Chaise Gamer 9">
+      <h3>Gamer 9</h3>
+      <p>Design premium.</p>
+      <div class="price">1700 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='S(9).webp') }}" alt="Chaise Gamer 10">
+      <h3>Gamer 10</h3>
+      <p>Ultra-confortable.</p>
+      <div class="price">1800 DH</div>
+    </div>
+    
+    <!-- Produits personnalisés pour Chaises Gamer -->
+    {% if produits_par_categorie %}
+      {% for categorie, produits in produits_par_categorie.items() %}
+        {% if categorie.lower() in ['chaise', 'chaises', 'chaise gamer', 'chaises gamer', 'siège'] %}
+          {% for produit in produits %}
+            <div class="product-card personalized">
+              <span class="personalized-badge">Personnalisé</span>
+              {% if produit.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + produit.image_url) }}" 
+                     alt="{{ produit.nom }}"
+                     style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; border-radius: 0.25rem;">
+              {% else %}
+                <div class="no-image">
+                  <i class="fas fa-image fa-2x"></i>
+                </div>
+              {% endif %}
+              
+              <h3>{{ produit.nom }}</h3>
+              
+              {% if produit.description and produit.description.strip() %}
+                <p>{{ produit.description[:80] }}{% if produit.description|length > 80 %}...{% endif %}</p>
+              {% else %}
+                <p style="color:#9ca3af; font-style: italic;">Aucune description disponible</p>
+              {% endif %}
+              
+              <div class="price">{{ "%.2f"|format(produit.prix) }} DH</div>
+              
+              <div style="margin: 10px 0;">
+                <small style="color:#6b7280; display: block;">
+                  <strong>Stock:</strong> {{ produit.stock }} unités
+                </small>
+                {% if produit.created_at %}
+                <small style="color:#6b7280; display: block;">
+                  <strong>Ajouté le:</strong> {{ produit.created_at.strftime('%d/%m/%Y') }}
+                </small>
+                {% endif %}
+              </div>
+              
+              <div class="category-badge">
+                {{ produit.categorie_nom or 'Non catégorisé' }}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+<!-- Accessoires -->
+<section id="accessoires">
+  <div class="section-title">
+    <p>ACCESSOIRES</p>
+    <h2>Accessoires informatiques</h2>
+  </div>
+  <div class="products">
+    <!-- Produits statiques -->
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='A.webp') }}" alt="Souris">
+      <h3>Souris Gaming</h3>
+      <p>Confort optimal pour longues sessions.</p>
+      <div class="price">1200 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='A(1).webp') }}" alt="Tapis">
+      <h3>Tapis Souris</h3>
+      <p>Design ergonomique.</p>
+      <div class="price">1300 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='A(2).webp') }}" alt="Clavier">
+      <h3>Clavier Mécanique</h3>
+      <p>Support lombaire intégré.</p>
+      <div class="price">1250 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='A(3).webp') }}" alt="Câble">
+      <h3>Câble d'alimentation</h3>
+      <p>Hauteur ajustable.</p>
+      <div class="price">1350 DH</div>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='A(4).webp') }}" alt="Bureau">
+      <h3>Bureau Gaming</h3>
+      <p>Roues silencieuses.</p>
+      <div class="price">1400 DH</div>
+    </div>
+    
+    <!-- Produits personnalisés pour Accessoires -->
+    {% if produits_par_categorie %}
+      {% for categorie, produits in produits_par_categorie.items() %}
+        {% if categorie.lower() in ['accessoire', 'accessoires', 'accessoires informatiques'] %}
+          {% for produit in produits %}
+            <div class="product-card personalized">
+              <span class="personalized-badge">Personnalisé</span>
+              {% if produit.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + produit.image_url) }}" 
+                     alt="{{ produit.nom }}"
+                     style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; border-radius: 0.25rem;">
+              {% else %}
+                <div class="no-image">
+                  <i class="fas fa-image fa-2x"></i>
+                </div>
+              {% endif %}
+              
+              <h3>{{ produit.nom }}</h3>
+              
+              {% if produit.description and produit.description.strip() %}
+                <p>{{ produit.description[:80] }}{% if produit.description|length > 80 %}...{% endif %}</p>
+              {% else %}
+                <p style="color:#9ca3af; font-style: italic;">Aucune description disponible</p>
+              {% endif %}
+              
+              <div class="price">{{ "%.2f"|format(produit.prix) }} DH</div>
+              
+              <div style="margin: 10px 0;">
+                <small style="color:#6b7280; display: block;">
+                  <strong>Stock:</strong> {{ produit.stock }} unités
+                </small>
+                {% if produit.created_at %}
+                <small style="color:#6b7280; display: block;">
+                  <strong>Ajouté le:</strong> {{ produit.created_at.strftime('%d/%m/%Y') }}
+                </small>
+                {% endif %}
+              </div>
+              
+              <div class="category-badge">
+                {{ produit.categorie_nom or 'Non catégorisé' }}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+<!-- PRODUITS DYNAMIQUES - POUR LES CATÉGORIES NON CORRESPONDANTES -->
+{% if produits_par_categorie %}
+  {% for categorie, produits in produits_par_categorie.items() %}
+    {% if categorie.lower() not in ['pc', 'ordinateur', 'pc bureautique', 'ordinateurs', 'imprimante', 'imprimantes', 'impression', 'papier', 'papiers', 'papier impression', 'chaise', 'chaises', 'chaise gamer', 'chaises gamer', 'siège', 'accessoire', 'accessoires', 'accessoires informatiques'] %}
+      <section id="{{ categorie|lower|replace(' ', '-')|replace('é','e')|replace('è','e') }}-dynamique">
+        <div class="section-title">
+          <p>CATÉGORIE - {{ categorie|upper }}</p>
+          <h2>{{ categorie }} <span class="dynamic-badge">{{ produits|length }} PRODUITS</span></h2>
+        </div>
+        <div class="products">
+          {% for produit in produits %}
+          <div class="product-card personalized">
+            <span class="personalized-badge">Personnalisé</span>
+            {% if produit.image_url %}
+              <img src="{{ url_for('static', filename='uploads/' + produit.image_url) }}" 
+                   alt="{{ produit.nom }}"
+                   style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; border-radius: 0.25rem;">
+            {% else %}
+              <div class="no-image">
+                <i class="fas fa-image fa-2x"></i>
+              </div>
+            {% endif %}
+            
+            <h3>{{ produit.nom }}</h3>
+            
+            {% if produit.description and produit.description.strip() %}
+              <p>{{ produit.description[:80] }}{% if produit.description|length > 80 %}...{% endif %}</p>
+            {% else %}
+              <p style="color:#9ca3af; font-style: italic;">Aucune description disponible</p>
+            {% endif %}
+            
+            <div class="price">{{ "%.2f"|format(produit.prix) }} DH</div>
+            
+            <div style="margin: 10px 0;">
+              <small style="color:#6b7280; display: block;">
+                <strong>Stock:</strong> {{ produit.stock }} unités
+              </small>
+              {% if produit.created_at %}
+              <small style="color:#6b7280; display: block;">
+                <strong>Ajouté le:</strong> {{ produit.created_at.strftime('%d/%m/%Y') }}
+              </small>
+              {% endif %}
+            </div>
+            
+            <div class="category-badge">
+              {{ produit.categorie_nom or 'Non catégorisé' }}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<footer>
+  <p>&copy; 2024 Farire Impression. Tous droits réservés.</p>
+  <p><a href="/" style="color: #e85a4f;">Retour à l'accueil</a></p>
+</footer>
+
+</body>
+</html>
